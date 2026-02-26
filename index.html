@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Prices & Mileage</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #1e1e1e;
+        color: #f8f9fa;
+      }
+
+      header {
+        background: linear-gradient(135deg, #343a40, #1f2933);
+        padding: 70px 20px;
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #f8f9fa;
+        letter-spacing: 1px;
+      }
+
+      .content {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #2c2c2c;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .chart-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+      }
+
+      .chart-container {
+        position: relative;
+        flex: 1;
+        min-width: 400px;
+        height: 400px;
+
+        transition: transform 0.3s ease;
+      }
+
+      .chart-container:hover {
+        transform: scale(1.02);
+      }
+
+      .blog-text {
+        line-height: 1.6;
+        font-size: 1rem;
+      }
+
+      h2 {
+        color: #ffffff;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      h2::after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 3px;
+        background: #4caf50;
+        margin: 10px auto 20px auto;
+        border-radius: 2px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <header>Car Prices & Mileage Analysis</header>
+
+    <div class="content">
+      <h2>Car Market Charts</h2>
+
+      <div class="chart-row">
+        <div class="chart-container">
+          <canvas id="priceChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <canvas id="mileageChart"></canvas>
+        </div>
+       <div class="chart-container">
+  <h3 style="text-align:center; color:#f8f9fa; margin-bottom:10px;">Cars Sold Yearly</h3>
+  <canvas id="yearPieChart"></canvas>
+</div>
+      </div>
+    </div>
+    <div class="content">
+      <h2>Analysis</h2>
+
+      <div class="blog-text">
+        <p>
+          The price distribution chart shows that most vehicles are concentrated
+          in the mid-range price brackets. This suggests that buyers are
+          primarily interested in affordable but reliable vehicles rather than
+          very cheap or luxury options.
+        </p>
+
+        <p>
+          The mileage distribution indicates that the majority of cars have
+          moderate mileage. This reflects a typical used car market where
+          vehicles are neither brand new nor excessively worn.
+        </p>
+
+        <p>
+          The yearly data pie chart highlights fluctuations over time, showing
+          periods of significant growth followed by decline. This may reflect
+          market trends, economic conditions, or changes in consumer demand.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const priceLabels = [
+        "1500-6500",
+        "6500-11500",
+        "11500-16500",
+        "16500-21500",
+        "21500-26500",
+        "26500-31500",
+        "31500-36500",
+        "36500-41500",
+        "41500-46500",
+        "46500-51500",
+      ];
+      const priceData = [
+        33884, 116681, 197429, 169941, 109724, 85550, 56544, 31888, 18432,
+        11965, 7341, 4386, 0, 7879,
+      ];
+
+      const mileageLabels = [
+        "5-7505",
+        "7505-15005",
+        "15005-22505",
+        "22505-30005",
+        "30005-37505",
+        "37505-45005",
+        "45005-52505",
+        "52505-60005",
+        "60005-67505",
+        "67505-75005",
+        "75005-82505",
+        "82505-90005",
+        "90005-97505",
+        "97505-105005",
+        "105005-112505",
+        "112505-120005",
+        "120005-127505",
+        "127505-135005",
+        "135005-142505",
+        "142505-150005",
+        "150005-157505",
+        "157505-165005",
+        "165005-172505",
+        "172505-178475",
+        ">178475",
+      ];
+      const mileageData = [
+        49010, 63121, 84988, 93612, 102005, 87077, 60311, 41457, 35892, 33942,
+        30623, 27235, 25517, 21445, 17107, 14457, 12337, 10229, 8048, 6819,
+        5421, 4496, 3504, 2348, 11120,
+      ];
+
+      // Price Chart
+      new Chart(document.getElementById("priceChart"), {
+        type: "bar",
+        data: {
+          labels: priceLabels,
+          datasets: [
+            {
+              label: "Distribution of Car Prices",
+              data: priceData,
+              backgroundColor: "#4caf50",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color: "#f8f9fa" },
+              grid: { color: "#555" },
+              title: {
+                display: true,
+                text: "Frequency",
+                color: "#f8f9fa",
+                font: { size: 16, weight: "bold" },
+              },
+            },
+            x: {
+              ticks: { color: "#f8f9fa" },
+              grid: { color: "#555" },
+              title: {
+                display: true,
+                text: "Price (€)",
+                color: "#f8f9fa",
+                font: { size: 16, weight: "bold" },
+              },
+            },
+          },
+          plugins: { legend: { labels: { color: "#f8f9fa" } } },
+        },
+      });
+
+      // Mileage Chart
+      new Chart(document.getElementById("mileageChart"), {
+        type: "bar",
+        data: {
+          labels: mileageLabels,
+          datasets: [
+            {
+              label: "Distribution of Vehicle Mileage",
+              data: mileageData,
+              backgroundColor: "#2196f3",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color: "#f8f9fa" },
+              grid: { color: "#555" },
+              title: {
+                display: true,
+                text: "Frequency",
+                color: "#f8f9fa",
+                font: { size: 16, weight: "bold" },
+              },
+            },
+            x: {
+              ticks: { color: "#f8f9fa" },
+              grid: { color: "#555" },
+              title: {
+                display: true,
+                text: "Mileage",
+                color: "#f8f9fa",
+                font: { size: 16, weight: "bold" },
+              },
+            },
+          },
+          plugins: { legend: { labels: { color: "#f8f9fa" } } },
+        },
+      });
+
+      const data = {
+        labels: [
+          "1997",
+          "1998",
+          "1999",
+          "2000",
+          "2001",
+          "2002",
+          "2003",
+          "2004",
+          "2005",
+          "2006",
+          "2007",
+          "2008",
+          "2009",
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+        ],
+        datasets: [
+          {
+            label: "Yearly Data",
+            data: [
+              596, 774, 1254, 1933, 2584, 3800, 5649, 8117, 11005, 15079, 21171,
+              24713, 19061, 27539, 39768, 49764, 74701, 162432, 157516, 132136,
+              91608, 922,
+            ],
+            backgroundColor: [
+              "#ff6384",
+              "#36a2eb",
+              "#ffcd56",
+              "#4bc0c0",
+              "#9966ff",
+              "#ff9f40",
+              "#c9cbcf",
+              "#8dd1e1",
+              "#d4a6c8",
+              "#90ee90",
+              "#f08080",
+              "#20b2aa",
+              "#ffa07a",
+              "#9370db",
+              "#3cb371",
+              "#cd5c5c",
+              "#6495ed",
+              "#ffb6c1",
+              "#00ced1",
+              "#dda0dd",
+              "#f4a460",
+              "#2ecc71",
+            ],
+            hoverOffset: 4,
+          },
+        ],
+      };
+
+      // Year Pie Chart
+
+      new Chart(document.getElementById("yearPieChart"), {
+        type: "pie",
+        data: {
+          labels: [
+            "1997",
+            "1998",
+            "1999",
+            "2000",
+            "2001",
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008",
+            "2009",
+            "2010",
+            "2011",
+            "2012",
+            "2013",
+            "2014",
+            "2015",
+            "2016",
+            "2017",
+            "2018",
+          ],
+          datasets: [
+            {
+              label: "Yearly Data",
+              data: [
+                596, 774, 1254, 1933, 2584, 3800, 5649, 8117, 11005, 15079,
+                21171, 24713, 19061, 27539, 39768, 49764, 74701, 162432, 157516,
+                132136, 91608, 922,
+              ],
+              backgroundColor: [
+                "#ff6384",
+                "#36a2eb",
+                "#ffcd56",
+                "#4bc0c0",
+                "#9966ff",
+                "#ff9f40",
+                "#c9cbcf",
+                "#8dd1e1",
+                "#d4a6c8",
+                "#90ee90",
+                "#f08080",
+                "#20b2aa",
+                "#ffa07a",
+                "#9370db",
+                "#3cb371",
+                "#cd5c5c",
+                "#6495ed",
+                "#ffb6c1",
+                "#00ced1",
+                "#dda0dd",
+                "#f4a460",
+                "#2ecc71",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: "#f8f9fa" },
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
